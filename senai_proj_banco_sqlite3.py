@@ -1,7 +1,5 @@
 import sqlite3
 
-########################################################################
-# CRIAÇÃO DO BANCO E TABELA:
 def criar_tabela(cursor,):
     SQL_TABELA_Produtos = '''
         CREATE TABLE if NOT EXISTS produtos (
