@@ -14,8 +14,8 @@ def criar_tabela(cursor,):
     cursor.execute(SQL_TABELA_Produtos)
 
 def cadastrar_produto(cursor):
-    print("Preencha os dados do produto:")
-    nome = input("ITEM: ")
+    print("###### CADASTRO DE PRODUTO ######")
+    nome = input("NOME: ")
     quantidade = input("QUANT.: ")
     preco = input("PRECO: ")
 
@@ -24,23 +24,20 @@ def cadastrar_produto(cursor):
         VALUES (?, ?, ?)
     '''
     cursor.execute(SQL_INSERT, (nome, quantidade, preco))
-    print("Produto cadastrado com sucesso")
+    print(f" ###### PRODUTO {nome} CADASTRADO COM SUCESSO ######")
 
-def estoque_total(cursor):
-    print("Produtos em estoque:")
+def estoque(cursor):
+    print("###### PRODUTOS EM ESTOQUE ######")
     SQL_ESTOQUE = '''
-        SELECT nome as "Nome do produto", quantidade as "Quantidade em estoque", preco as "Preço"
+        SELECT ide as "Codigo", nome as "Nome do produto", quantidade as "Quantidade em estoque", preco as "Preço"
         FROM produtos
     '''
     cursor.execute(SQL_ESTOQUE)
     produto = cursor.fetchall()
-
-    if produto:
-        print(produto)
-        # print(f"ID: {produto[0]}, Nome: {produto[1]}, Quantidade: {produto[2]}, Preço: {produto[3]}" )
+    print(produto)
 
 def busca_produto(cursor):
-    nome = input("Digite o nome do produto: ")
+    nome = input("###### BUSCA DE PRODUTO ######")
     SQL_BUSCA = '''
         SELECT ide, nome, quantidade, preco
         FROM produtos
@@ -53,14 +50,14 @@ def busca_produto(cursor):
         print(f"ID: {produto[0]}, Nome: {produto[1]}, Quantidade: {produto[2]}, Preço: {produto[3]}")
 
 def apagar_produto(cursor):
-    print("APAGAR PRODUTO")
-    nome = input ("Digite o nome do produto que deseja apagar: ")
+    print("###### APAGAR PRODUTO ######")
+    ide = input ("Digite o código do produto que deseja apagar: ")
 
     SQL_DELETE = '''
-        DELETE FROM produtos WHERE nome = ?
+        DELETE FROM produtos WHERE ide = ?
     '''
-    cursor.execute(SQL_DELETE, (nome,))
-    print("Produto apagado com sucesso")
+    cursor.execute(SQL_DELETE, (ide,))
+    print("###### PRODUTO APAGADO COM SUCESSO ######")
 
 def exibir_menu():
     print("Menu principal")
@@ -68,7 +65,7 @@ def exibir_menu():
     print("2 - Estoque total")
     print("3 - Buscar produto")
     print("4 - Apagar produto")
-    print("ESC - Sair")
+    print("0 - Sair")
     return input("Escolha uma opção: ")
 
 def main():
@@ -80,20 +77,18 @@ def main():
     while True:
         opcao = exibir_menu()
         if opcao == "1":
-            print("##### CADASTRO DE PRODUTO #####")
             cadastrar_produto(cursor)
             conn.commit()
         elif opcao == "2":
-            print("##### ESTOQUE TOTAL #####")
-            estoque_total(cursor)
+            estoque(cursor)
             conn.commit()
         elif opcao == "3":
             busca_produto(cursor)
         elif opcao == "4":
             apagar_produto(cursor)
             conn.commit()
-        elif opcao == "ESC":
-            print("##### SESSÃO ENCERRADA #####")
+        elif opcao == "0":
+            print("###### SESSÃO ENCERRADA ######")
             break
         else:
             print("Opção inválida")
